@@ -5,8 +5,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Map"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="IMIE Map Editor" Height="720" Width="1280">
     <Grid>
-        
+        <Menu Height="23" Name="mainMenu" VerticalAlignment="Top">
+            <MenuItem Header="File">
+                <MenuItem Command="ApplicationCommands.New" Header="New" />
+                <MenuItem Command="ApplicationCommands.Save" Header="Save" />
+                <MenuItem Command="ApplicationCommands.Open" Header="Open" />
+                <MenuItem Command="ApplicationCommands.Close" Header="Exit" />
+            </MenuItem>
+        </Menu>
+        <Grid Margin="0, 24, 0, 0">
+            <Canvas Name="Canvas1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MouseMove="OnMouseMove" MouseDown="OnMouseDown" MouseUp="OnMouseUp" MouseWheel="OnMouseWheel" />
+            <Canvas Name="Canvas2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MouseMove="OnMouseMove" MouseDown="OnMouseDown" MouseUp="OnMouseUp" MouseWheel="OnMouseWheel" />
+            <ListView Name="ListViewImages" Width="200" HorizontalAlignment="Right" VerticalAlignment="Stretch"></ListView>
+        </Grid>
     </Grid>
 </Window>
