@@ -35,7 +35,7 @@ namespace Map
             CommandBindings.Add(new CommandBinding(ApplicationCommands.Save, SaveCommand));
             CommandBindings.Add(new CommandBinding(ApplicationCommands.Close, ExitCommand));
             CommandBindings.Add(new CommandBinding(ApplicationCommands.Properties, PropertiesCommand));
-            CommandBindings.Add(new CommandBinding(ApplicationCommands.Replace, TilesetCommand));
+            CommandBindings.Add(new CommandBinding(ApplicationCommands.Replace, TileSetCommand));
 
             InitializeComponent();
         }
@@ -67,7 +67,7 @@ namespace Map
 
         public void OpenCommand(object sender, RoutedEventArgs args)
         {
-            string file = OpenFile(".txt");
+            string file = OpenFile(".txt")[0];
 
             if (file != "")
             {
@@ -80,7 +80,7 @@ namespace Map
                 }
                 else if (editor == null)
                 {
-                    editor = new Editor(this, new BitmapImage(new Uri(OpenFile(".png"))));
+                    editor = new Editor(this);
                 }
 
                 editor.LoadMap(file);
@@ -95,12 +95,16 @@ namespace Map
             }
         }
 
-        public void TilesetCommand(object sender, RoutedEventArgs args)
+        public void TileSetCommand(object sender, RoutedEventArgs args)
         {
             if (editor != null)
             {
-                var image = new BitmapImage(new Uri(OpenFile(".png")));
-                editor.SetTileset(image);
+                List<BitmapImage> bitmapImages = new List<BitmapImage>();
+                foreach (string file in OpenFile(".png", true))
+                {
+                    bitmapImages.Add(new BitmapImage(new Uri(file)));
+                }
+                editor.DiplayImages(bitmapImages);
             }
         }
 
@@ -122,13 +126,11 @@ namespace Map
                 MapPropertyWindow mapPropertyWindow = new MapPropertyWindow();
                 mapPropertyWindow.ShowDialog();
 
-                var image = new BitmapImage(new Uri(OpenFile(".png")));
-
                 zoom = 1;
                 offsetX = 0;
                 offsetY = 0;
 
-                return new Editor(this, int.Parse(mapPropertyWindow.WidthTextBox.Text), int.Parse(mapPropertyWindow.HeightTextBox.Text), int.Parse(mapPropertyWindow.TileWidthTextBox.Text), int.Parse(mapPropertyWindow.TileHeightTextBox.Text), image);
+                return new Editor(this, int.Parse(mapPropertyWindow.WidthTextBox.Text), int.Parse(mapPropertyWindow.HeightTextBox.Text), int.Parse(mapPropertyWindow.TileWidthTextBox.Text), int.Parse(mapPropertyWindow.TileHeightTextBox.Text));
             }
             catch (Exception)
             {
@@ -219,14 +221,15 @@ namespace Map
             }
         }
 
-        public string OpenFile(string fileType)
+        public string[] OpenFile(string fileType, bool multi = false)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.DefaultExt = fileType;
+            openFileDialog.Multiselect = multi;
             openFileDialog.Filter = string.Format($"{fileType}|*{fileType}");
             bool? result = openFileDialog.ShowDialog();
 
-            return result == true ? openFileDialog.FileName : "";
+            return result == true ? openFileDialog.FileNames : new string[0];
         }
 
         public bool Save()

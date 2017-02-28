@@ -17,7 +17,6 @@ namespace Map.Models
         private int height;
         private int tileWidth;
         private int tileHeight;
-        private BitmapSource tileSet;
         private List<CroppedBitmap> images = new List<CroppedBitmap>();
 
         #endregion
@@ -30,20 +29,18 @@ namespace Map.Models
 
         #region Constructors
 
-        public Editor(MainWindow mainWindow, int width, int height, int tileWidth, int tileHeight, BitmapSource tileSet)
+        public Editor(MainWindow mainWindow, int width, int height, int tileWidth, int tileHeight)
+            : this(mainWindow)
         {
-            this.mainWindow = mainWindow;
-            this.tileSet = tileSet;
             SetProperties(width, height, tileWidth, tileHeight);
             Dirty = true;
 
             Initialize();
         }
 
-        public Editor(MainWindow mainWindow, BitmapImage bitmapImage)
+        public Editor(MainWindow mainWindow)
         {
             this.mainWindow = mainWindow;
-            tileSet = bitmapImage;
         }
 
         #endregion
@@ -54,16 +51,6 @@ namespace Map.Models
         {
             images.Clear();
 
-            for (int i = 0; i < tileSet.PixelHeight; i += tileHeight)
-            {
-                for (int j = 0; j < tileSet.PixelWidth; j += tileWidth)
-                {
-                    CroppedBitmap croppedBitmap = new CroppedBitmap(tileSet, new Int32Rect(j, i, tileWidth, tileHeight));
-                    images.Add(croppedBitmap);
-                }
-            }
-
-            mainWindow.SetImages(images);
             mainWindow.SetCanvas(width * tileWidth, height * tileHeight, tileWidth, tileHeight);
             mainWindow.SetCanvasContent(map, width, height, tileWidth, tileHeight);
         }
@@ -118,10 +105,15 @@ namespace Map.Models
             }
         }
 
-        internal void SetTileset(BitmapImage bitmapImage)
+        internal void DiplayImages(List<BitmapImage> tiles)
         {
-            tileSet = bitmapImage;
-            Initialize();
+            foreach (BitmapImage tile in tiles)
+            {
+                CroppedBitmap croppedBitmap = new CroppedBitmap(tile, new Int32Rect(0, 0, tileWidth, tileHeight));
+                images.Add(croppedBitmap);
+            }
+
+            mainWindow.SetImages(images);
         }
 
         internal void Save(string s)
@@ -136,7 +128,6 @@ namespace Map.Models
                 }
                 stringBuilder.Remove(stringBuilder.Length - 1, 1).AppendLine("");
             }
-
             File.WriteAllText(s, stringBuilder.ToString());
         }
 
