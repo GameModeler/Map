@@ -12,6 +12,11 @@ namespace Map
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Closes the properties window when validating.
+        /// </summary>
+        /// <param name="sender">Object triggering the event.</param>
+        /// <param name="e">Facultative arguments.</param>
         private void MapValidationButton_OnClick(object sender, RoutedEventArgs e)
         {
             Close();

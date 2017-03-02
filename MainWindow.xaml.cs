@@ -18,10 +18,21 @@ namespace Map
     {
         #region Attributes
 
+        /// <summary>
+        /// Instance of the Editor class.
+        /// </summary>
         private Editor editor;
         private double offsetX;
         private double offsetY;
+
+        /// <summary>
+        /// Zoom applied to the map.
+        /// </summary>
         private double zoom = 1;
+
+        /// <summary>
+        /// 
+        /// </summary>
         private Point prevPosition;
 
         #endregion
@@ -44,6 +55,11 @@ namespace Map
 
         #region Methods
 
+        /// <summary>
+        /// Command executed to create a new map.
+        /// </summary>
+        /// <param name="sender">Object triggering the command.</param>
+        /// <param name="args">Facultative arguments.</param>
         public void NewCommand(object sender, RoutedEventArgs args)
         {
             if (editor != null && editor.Dirty)
@@ -57,6 +73,11 @@ namespace Map
             editor = NewMap();
         }
 
+        /// <summary>
+        /// Command executed to save a map.
+        /// </summary>
+        /// <param name="sender">Object triggering the command.</param>
+        /// <param name="args">Facultative arguments.</param>
         public void SaveCommand(object sender, RoutedEventArgs args)
         {
             if (editor != null)
@@ -65,6 +86,11 @@ namespace Map
             }
         }
 
+        /// <summary>
+        /// Command executed to load a map from a save.
+        /// </summary>
+        /// <param name="sender">Object triggering the command.</param>
+        /// <param name="args">Facultative arguments.</param>
         public void OpenCommand(object sender, RoutedEventArgs args)
         {
             string file = OpenFile(".txt")[0];
@@ -87,6 +113,11 @@ namespace Map
             }
         }
 
+        /// <summary>
+        /// Command executed to exit the editor (checks if the map has been saved).
+        /// </summary>
+        /// <param name="sender">Object triggering the command.</param>
+        /// <param name="args">Facultative arguments.</param>
         public void ExitCommand(object sender, RoutedEventArgs args)
         {
             if (editor == null || !editor.Dirty || Save())
@@ -95,6 +126,11 @@ namespace Map
             }
         }
 
+        /// <summary>
+        /// Command executed to add new images.
+        /// </summary>
+        /// <param name="sender">Object triggering the command.</param>
+        /// <param name="args">Facultative arguments.</param>
         public void TileSetCommand(object sender, RoutedEventArgs args)
         {
             if (editor != null)
@@ -108,6 +144,11 @@ namespace Map
             }
         }
 
+        /// <summary>
+        /// Command executed to change map properties.
+        /// </summary>
+        /// <param name="sender">Object triggering the command.</param>
+        /// <param name="args">Facultative arguments.</param>
         public void PropertiesCommand(object sender, RoutedEventArgs args)
         {
             if (editor != null)
@@ -119,6 +160,10 @@ namespace Map
             }
         }
 
+        /// <summary>
+        /// Creates a new map after asking for its properties.
+        /// </summary>
+        /// <returns>An instance of an Editor containing the map.</returns>
         private Editor NewMap()
         {
             try
@@ -138,6 +183,13 @@ namespace Map
             }
         }
 
+        /// <summary>
+        /// Sets the "container" canvas of the map.
+        /// </summary>
+        /// <param name="width">Number of horizontal squares.</param>
+        /// <param name="height">Number of vertical squares.</param>
+        /// <param name="tileWidth">Width of a tile.</param>
+        /// <param name="tileHeight">Height of a tile.</param>
         public void SetCanvas(int width, int height, int tileWidth, int tileHeight)
         {
             Canvas1.Children.Clear();
@@ -165,6 +217,14 @@ namespace Map
             }
         }
 
+        /// <summary>
+        /// Sets the content of the map
+        /// </summary>
+        /// <param name="map">Existing map to fill this content.</param>
+        /// <param name="width">Number of horizontal squares.</param>
+        /// <param name="height">Number of vertical squares.</param>
+        /// <param name="tileWidth">Width of a tile.</param>
+        /// <param name="tileHeight">Height of a tile.</param>
         internal void SetCanvasContent(int[,] map, int width, int height, int tileWidth, int tileHeight)
         {
             if (editor != null)
@@ -192,6 +252,14 @@ namespace Map
             }
         }
 
+        /// <summary>
+        /// Sets the new state of the map when drawing.
+        /// </summary>
+        /// <param name="x">Horizontal position.</param>
+        /// <param name="y">Vertical position.</param>
+        /// <param name="tileWidth">Width of a tile.</param>
+        /// <param name="tileHeight">Height of a tile.</param>
+        /// <param name="index">Index of an image in the ListView.</param>
         internal void SetCanvasContentDrawOver(int x, int y, int tileWidth, int tileHeight, int index)
         {
             if (editor != null)
@@ -221,6 +289,12 @@ namespace Map
             }
         }
 
+        /// <summary>
+        /// Dialog to load one or multiple files.
+        /// </summary>
+        /// <param name="fileType">Type of the file (.png, .jpg, etc...).</param>
+        /// <param name="multi">Sets if the dialog should allow multiple selection or not.</param>
+        /// <returns>Returns an array containing the files to load.</returns>
         public string[] OpenFile(string fileType, bool multi = false)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -232,6 +306,10 @@ namespace Map
             return result == true ? openFileDialog.FileNames : new string[0];
         }
 
+        /// <summary>
+        /// Dialog to save a map.
+        /// </summary>
+        /// <returns>Returns true if the map has been saved.</returns>
         public bool Save()
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
@@ -250,6 +328,10 @@ namespace Map
             return false;
         }
 
+        /// <summary>
+        /// Loads the images in the ListView ready to be used to paint the map.
+        /// </summary>
+        /// <param name="images">Images to add to the ListView.</param>
         public void SetImages(List<CroppedBitmap> images)
         {
             ListViewImages.Items.Clear();
@@ -260,6 +342,9 @@ namespace Map
             ListViewImages.Width = images[0].Width * 2 + 32;
         }
 
+        /// <summary>
+        /// Allows the zoom on the map.
+        /// </summary>
         private void MoveZoom()
         {
             if (editor != null)
@@ -273,6 +358,14 @@ namespace Map
             }
         }
 
+        /// <summary>
+        /// Exetutes different behaviours on the map depending on the mouse button being pressed.
+        /// Left button draws the selected image of the ListView at the current position.
+        /// Right button erases the image at the current position.
+        /// Middle button pans on the map.
+        /// </summary>
+        /// <param name="sender">Object triggering the event.</param>
+        /// <param name="e">Facultative arguments.</param>
         private void OnMouseMove(object sender, MouseEventArgs e)
         {
             if (editor != null)
@@ -299,6 +392,11 @@ namespace Map
             }
         }
 
+        /// <summary>
+        /// Calls the appropriate action when pressing a mouse button.
+        /// </summary>
+        /// <param name="sender">Object triggering the event.</param>
+        /// <param name="e">Facultative arguments.</param>
         private void OnMouseDown(object sender, MouseButtonEventArgs e)
         {
             if (editor != null)
@@ -314,6 +412,11 @@ namespace Map
             }
         }
 
+        /// <summary>
+        /// Triggers the map repainting when releasing mouse buttons.
+        /// </summary>
+        /// <param name="sender">Object triggering the event.</param>
+        /// <param name="e">Facultative arguments.</param>
         private void OnMouseUp(object sender, MouseButtonEventArgs e)
         {
             if (editor != null)
@@ -322,6 +425,11 @@ namespace Map
             }
         }
 
+        /// <summary>
+        /// Zooms in and out on the map using the scroll wheel.
+        /// </summary>
+        /// <param name="sender">Object triggering the event.</param>
+        /// <param name="e">Facultative arguments.</param>
         private void OnMouseWheel(object sender, MouseWheelEventArgs e)
         {
             if (editor != null)

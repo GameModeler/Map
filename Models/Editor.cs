@@ -11,18 +11,48 @@ namespace Map.Models
     {
         #region Attributes
 
+        /// <summary>
+        /// Window containing the map.
+        /// </summary>
         private MainWindow mainWindow;
+
+        /// <summary>
+        /// Array representing the map.
+        /// </summary>
         private int[,] map;
+
+        /// <summary>
+        /// Width of the map (number of squares).
+        /// </summary>
         private int width;
+
+        /// <summary>
+        /// Height of the map (number of squares).
+        /// </summary>
         private int height;
+
+        /// <summary>
+        /// Width of a tile.
+        /// </summary>
         private int tileWidth;
+
+        /// <summary>
+        /// Height of a tile.
+        /// </summary>
         private int tileHeight;
+
+        /// <summary>
+        /// Images available to paint the map.
+        /// </summary>
         private List<CroppedBitmap> images = new List<CroppedBitmap>();
 
         #endregion
 
         #region Properties
 
+        /// <summary>
+        /// Boolean value representing the state of the Map (not saved if false).
+        /// </summary>
         public bool Dirty { get; set; }
 
         #endregion
@@ -47,6 +77,9 @@ namespace Map.Models
 
         #region Methods
 
+        /// <summary>
+        /// Initializes the map by clearing the images and creating an empty map.
+        /// </summary>
         private void Initialize()
         {
             images.Clear();
@@ -55,6 +88,13 @@ namespace Map.Models
             mainWindow.SetCanvasContent(map, width, height, tileWidth, tileHeight);
         }
 
+        /// <summary>
+        /// Sets the map properties. 
+        /// </summary>
+        /// <param name="width">Number of horizontal squares.</param>
+        /// <param name="height">Number of vertical squares.</param>
+        /// <param name="tileWidth">Width of a tile.</param>
+        /// <param name="tileHeight">Height of a tile.</param>
         internal void SetProperties(int width, int height, int tileWidth, int tileHeight)
         {
             if (map == null)
@@ -105,6 +145,10 @@ namespace Map.Models
             }
         }
 
+        /// <summary>
+        /// Crops the images and adds them to the UI.
+        /// </summary>
+        /// <param name="tiles">Images to add to the UI.</param>
         internal void DiplayImages(List<BitmapImage> tiles)
         {
             foreach (BitmapImage tile in tiles)
@@ -116,6 +160,10 @@ namespace Map.Models
             mainWindow.SetImages(images);
         }
 
+        /// <summary>
+        /// Saves the map.
+        /// </summary>
+        /// <param name="s">Name of the save file.</param>
         internal void Save(string s)
         {
             StringBuilder stringBuilder = new StringBuilder();
@@ -131,6 +179,10 @@ namespace Map.Models
             File.WriteAllText(s, stringBuilder.ToString());
         }
 
+        /// <summary>
+        /// Loads a map from a save file.
+        /// </summary>
+        /// <param name="file">Save file.</param>
         internal void LoadMap(string file)
         {
             string[] lines = File.ReadAllLines(file);
@@ -158,6 +210,11 @@ namespace Map.Models
             Repaint();
         }
 
+        /// <summary>
+        /// Draws a loaded image in a square of the map.
+        /// </summary>
+        /// <param name="point"></param>
+        /// <param name="p"></param>
         internal void Draw(Point point, int p)
         {
             int x = (int) point.X / tileWidth;
@@ -171,6 +228,9 @@ namespace Map.Models
             }
         }
 
+        /// <summary>
+        /// Paints the map after loading a save.
+        /// </summary>
         internal void Repaint()
         {
             mainWindow.SetCanvasContent(map, width, height, tileWidth, tileHeight);
