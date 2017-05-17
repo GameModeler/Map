@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.IO;
 
 namespace Map.Models
@@ -31,7 +32,7 @@ namespace Map.Models
         public Asset(string location)
         {
             Location = location;
-            Picture = new Bitmap(Location);
+            Picture = (Bitmap) Image.FromFile(GetName(true));
         }
 
         #endregion
