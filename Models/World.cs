@@ -66,6 +66,18 @@ namespace Map.Models
         }
 
         /// <summary>
+        /// World initialization with a name, a width, a height and a starting saved state.
+        /// </summary>
+        /// <param name="name">The map's name.</param>
+        /// <param name="width">The map's width.</param>
+        /// <param name="height">The map's height.</param>
+        /// <param name="isSaved">The map's starting saved state.</param>
+        public World(string name, int width, int height, bool isSaved) : this(name, width, height)
+        {
+            IsSaved = isSaved;
+        }
+
+        /// <summary>
         /// World initialization with a name, a width, a height and a background.
         /// </summary>
         /// <param name="name">The map's name.</param>
