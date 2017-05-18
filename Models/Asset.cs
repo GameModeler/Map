@@ -17,9 +17,19 @@ namespace Map.Models
         public string Location { get; set; }
 
         /// <summary>
+        /// Asset's name.
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
         /// Asset's pixel data with it's attributes.
         /// </summary>
         public Image Picture { get; set; }
+
+        /// <summary>
+        /// Asset's selection state.
+        /// </summary>
+        public bool IsSelected { get; set; }
 
         #endregion
 
@@ -32,7 +42,9 @@ namespace Map.Models
         public Asset(string location)
         {
             Location = location;
-            Picture = (Bitmap) Image.FromFile(GetName(true));
+            Name = GetName();
+            Picture = new Bitmap(Location);
+            IsSelected = false;
         }
 
         #endregion
