@@ -8,7 +8,7 @@ namespace Map.Utilities
     /// <summary>
     /// Utility class for interactions with the Windows OS.
     /// </summary>
-    public static class WindowsInteractions
+    public static class WindowsUtilities
     {
         /// <summary>
         /// Generic message box to notify the user and get back a response depending on the type being used.

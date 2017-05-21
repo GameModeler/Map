@@ -1,35 +1,78 @@
 using System;
 using System.Drawing;
 using System.IO;
+using Map.Models.Base;
 
 namespace Map.Models
 {
     /// <summary>
     /// Represents an asset of the map.
     /// </summary>
-    public class Asset
+    [Serializable]
+    public class Asset : BaseModel
     {
+        #region Attributes
+
+        private string _location;
+        private string _name;
+        private Image _picture;
+        private bool _isSelected;
+
+        #endregion
+
         #region Properties
 
         /// <summary>
         /// Asset's location on the storage drive.
         /// </summary>
-        public string Location { get; set; }
+        public string Location
+        {
+            get => _location;
+            set
+            {
+                _location = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Asset's name.
         /// </summary>
-        public string Name { get; set; }
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                _name = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Asset's pixel data with it's attributes.
         /// </summary>
-        public Image Picture { get; set; }
+        public Image Picture
+        {
+            get => _picture;
+            set
+            {
+                _picture = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Asset's selection state.
         /// </summary>
-        public bool IsSelected { get; set; }
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set
+            {
+                _isSelected = value;
+                OnPropertyChanged();
+            }
+        }
 
         #endregion
 

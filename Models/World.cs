@@ -1,33 +1,106 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using Map.Models.Base;
 
 namespace Map.Models
 {
     /// <summary>
     /// Represents a map.
     /// </summary>
-    public class World
+    [Serializable]
+    public class World : BaseModel
     {
+        #region Attributes
+
+        private string _name;
+        private int _width;
+        private int _height;
+        private int _cellWidth;
+        private int _cellHeight;
+        private Asset _background;
+        private bool _isSaved;
+
+        #endregion
+
         #region Properties
 
         /// <summary>
         /// Map's name.
         /// </summary>
-        public string Name { get; set; }
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                _name = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Map's width.
         /// </summary>
-        public int Width { get; set; }
+        public int Width
+        {
+            get => _width;
+            set
+            {
+                _width = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Map's height.
         /// </summary>
-        public int Height { get; set; }
+        public int Height {
+            get => _height;
+            set
+            {
+                _height = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Cells width.
+        /// </summary>
+        public int CellWidth
+        {
+            get => _cellWidth;
+            set
+            {
+                _cellWidth = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Cells height.
+        /// </summary>
+        public int CellHeight
+        {
+            get => _cellHeight;
+            set
+            {
+                _cellHeight = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Map's background.
         /// </summary>
-        public Asset Background { get; set; }
+        public Asset Background
+        {
+            get => _background;
+            set
+            {
+                _background = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Layers of the map.
@@ -37,7 +110,15 @@ namespace Map.Models
         /// <summary>
         /// Map's save state.
         /// </summary>
-        public bool IsSaved { get; set; }
+        public bool IsSaved
+        {
+            get => _isSaved;
+            set
+            {
+                _isSaved = value;
+                OnPropertyChanged();
+            }
+        }
 
         #endregion
 
@@ -48,7 +129,12 @@ namespace Map.Models
         /// </summary>
         public World()
         {
-            Layers = new List<Layer>();
+            Name = "My Map";
+            Width = 15;
+            Height = 10;
+            CellWidth = 64;
+            CellHeight = 64;
+            Layers = new ObservableCollection<Layer>();
             IsSaved = false;
         }
 
@@ -58,11 +144,17 @@ namespace Map.Models
         /// <param name="name">The map's name.</param>
         /// <param name="width">The map's width.</param>
         /// <param name="height">The map's height.</param>
-        public World(string name, int width, int height) : this()
+        /// <param name="cellWidth">Width of a cell.</param>
+        /// <param name="cellHeight">Height of a cell.</param>
+        /// <param name="background">The map's background.</param>
+        public World(string name, int width, int height, int cellWidth, int cellHeight, Asset background) : this()
         {
             Name = name;
             Width = width;
             Height = height;
+            CellWidth = cellWidth;
+            CellHeight = cellHeight;
+            Background = background;
         }
 
         /// <summary>
@@ -71,22 +163,13 @@ namespace Map.Models
         /// <param name="name">The map's name.</param>
         /// <param name="width">The map's width.</param>
         /// <param name="height">The map's height.</param>
+        /// <param name="cellWidth">Width of a cell.</param>
+        /// <param name="cellHeight">Height of a cell.</param>
+        /// <param name="background">The map's background.</param>
         /// <param name="isSaved">The map's starting saved state.</param>
-        public World(string name, int width, int height, bool isSaved) : this(name, width, height)
+        public World(string name, int width, int height, int cellWidth, int cellHeight, Asset background, bool isSaved) : this(name, width, height, cellWidth, cellHeight, background)
         {
             IsSaved = isSaved;
-        }
-
-        /// <summary>
-        /// World initialization with a name, a width, a height and a background.
-        /// </summary>
-        /// <param name="name">The map's name.</param>
-        /// <param name="width">The map's width.</param>
-        /// <param name="height">The map's height.</param>
-        /// <param name="background">The map's background.</param>
-        public World(string name, int width, int height, Asset background) : this(name, width, height)
-        {
-            Background = background;
         }
 
         #endregion

@@ -1,33 +1,64 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using Map.Models.Base;
 
 namespace Map.Models
 {
     /// <summary>
     /// Represents a map layer.
     /// </summary>
-    public class Layer
+    [Serializable]
+    public class Layer : BaseModel
     {
+        #region Attributes
+
+        private string _name;
+        private Asset _background;
+        private bool _isSelected;
+
+        #endregion
+
         #region Properties
 
         /// <summary>
         /// Layer's name.
         /// </summary>
-        public string Name { get; set; }
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                _name = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Layer's background.
         /// </summary>
-        public Asset Background { get; set; }
+        public Asset Background
+        {
+            get => _background;
+            set
+            {
+                _background = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
-        /// Cells width.
+        /// Layer's selection state.
         /// </summary>
-        public int CellWidth { get; set; }
-
-        /// <summary>
-        /// Cells height.
-        /// </summary>
-        public int CellHeight { get; set; }
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set
+            {
+                _isSelected = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Collection of cells in the layer.
@@ -43,7 +74,27 @@ namespace Map.Models
         /// </summary>
         public Layer()
         {
-            Cells = new List<Cell>();
+            Cells = new ObservableCollection<Cell>();
+            IsSelected = false;
+        }
+
+        /// <summary>
+        /// Layer initialization with a name.
+        /// </summary>
+        /// <param name="name">The name of the layer.</param>
+        public Layer(string name) : this()
+        {
+            Name = name;
+        }
+
+        /// <summary>
+        /// Layer initialization with a name and a background.
+        /// </summary>
+        /// <param name="name">The name of the layer.</param>
+        /// <param name="background">The background of the layer.</param>
+        public Layer(string name, Asset background) : this(name)
+        {
+            Background = background;
         }
 
         #endregion

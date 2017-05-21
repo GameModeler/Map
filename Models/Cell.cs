@@ -1,19 +1,37 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Drawing;
+using Map.Models.Base;
 
 namespace Map.Models
 {
     /// <summary>
     /// Represents a cell of the map.
     /// </summary>
-    public class Cell
+    [Serializable]
+    public class Cell : BaseModel
     {
+        #region Attributes
+
+        private Point _position;
+
+        #endregion
+
         #region Properties
 
         /// <summary>
         /// Cell's position on the map.
         /// </summary>
-        public Point Position { get; set; }
+        public Point Position
+        {
+            get => _position;
+            set
+            {
+                _position = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Collection of assets inside the cell.
@@ -29,7 +47,7 @@ namespace Map.Models
         /// </summary>
         public Cell()
         {
-            Assets = new List<Asset>();
+            Assets = new ObservableCollection<Asset>();
         }
 
         #endregion
