@@ -20,6 +20,7 @@ namespace Map.Models
         private int _cellHeight;
         private Asset _background;
         private bool _isSaved;
+        private bool _isModified;
 
         #endregion
 
@@ -120,6 +121,19 @@ namespace Map.Models
             }
         }
 
+        /// <summary>
+        /// Map's modification state.
+        /// </summary>
+        public bool IsModified
+        {
+            get => _isModified;
+            set
+            {
+                _isModified = value;
+                OnPropertyChanged();
+            }
+        }
+
         #endregion
 
         #region Constructors
@@ -136,6 +150,7 @@ namespace Map.Models
             CellHeight = 64;
             Layers = new ObservableCollection<Layer>();
             IsSaved = false;
+            IsModified = true;
         }
 
         /// <summary>
