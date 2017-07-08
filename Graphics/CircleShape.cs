@@ -1,0 +1,114 @@
+﻿using System;
+using Map.Core.Structs;
+
+namespace Map.Graphics
+{
+    /// <summary>
+    /// Specialized shape representing a circle
+    /// </summary>
+    public class CircleShape : Shape
+    {
+        #region Attributes
+
+        private float _radius;
+        private int _pointCount;
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Radius of the shape
+        /// </summary>
+        public float Radius
+        {
+            get => _radius;
+            set
+            {
+                _radius = value;
+                Update();
+            }
+        }
+
+        #endregion
+
+        #region Constructors
+
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public CircleShape() : this(0) {}
+        
+        /// <summary>
+        /// Construct the shape with an initial radius
+        /// </summary>
+        /// <param name="radius">Radius of the shape</param>
+        public CircleShape(float radius) : this(radius, 30) {}
+        
+        /// <summary>
+        /// Construct the shape with an initial radius and point count
+        /// </summary>
+        /// <param name="radius">Radius of the shape</param>
+        /// <param name="pointCount">Number of points of the shape</param>
+        public CircleShape(float radius, int pointCount)
+        {
+            Radius = radius;
+            SetPointCount(pointCount);
+        }
+        
+        /// <summary>
+        /// Construct the shape from another shape
+        /// </summary>
+        /// <param name="copy">Shape to copy</param>
+        public CircleShape(CircleShape copy) : base(copy)
+        {
+            Radius = copy.Radius;
+            SetPointCount(copy.GetPointCount());
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Get the total number of points of the circle
+        /// </summary>
+        /// <returns>The total point count</returns>
+        public override int GetPointCount()
+        {
+            return _pointCount;
+        }
+        
+        /// <summary>
+        /// Set the number of points of the circle.
+        /// The count must be greater than 2 to define a valid shape.
+        /// </summary>
+        /// <param name="count">New number of points of the circle</param>
+        public void SetPointCount(int count)
+        {
+            _pointCount = count;
+            Update();
+        }
+        
+        /// <summary>
+        /// Get the position of a point
+        ///
+        /// The returned point is in local coordinates, that is,
+        /// the shape's transforms (position, rotation, scale) are
+        /// not taken into account.
+        /// The result is undefined if index is out of the valid range.
+        /// </summary>
+        /// <param name="index">Index of the point to get, in range [0 .. PointCount - 1]</param>
+        /// <returns>index-th point of the shape</returns>
+        public override Vector2Df GetPoint(int index)
+        {
+            var angle = (float) (index * 2 * Math.PI / _pointCount - Math.PI / 2);
+            var x = (float) Math.Cos(angle) * _radius;
+            var y = (float) Math.Sin(angle) * _radius;
+
+            return new Vector2Df(_radius + x, _radius + y);
+        }
+
+        #endregion
+    }
+}
