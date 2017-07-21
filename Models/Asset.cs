@@ -79,7 +79,7 @@ namespace Map.Models
         #region Constructors
 
         /// <summary>
-        /// Asset initialization.
+        /// Asset initialization with a location.
         /// </summary>
         /// <param name="location">The asset's location on the storage drive.</param>
         public Asset(string location)
@@ -88,6 +88,16 @@ namespace Map.Models
             Name = GetName();
             Picture = new Bitmap(Location);
             IsSelected = false;
+        }
+
+        /// <summary>
+        /// Asset initialization with a location and a custom name.
+        /// </summary>
+        /// <param name="location">The asset's location on the storage drive.</param>
+        /// <param name="name">Custom name of the asset</param>
+        public Asset(string location, string name) : this(location)
+        {
+            Name = name;
         }
 
         #endregion
@@ -106,12 +116,13 @@ namespace Map.Models
         }
 
         /// <summary>
-        /// Returns the full location path of the asset on the storage drive.
+        /// Returns the full location path or the name of the asset
+        /// depending on the path boolean value
         /// </summary>
         /// <returns>The full path to the asset.</returns>
-        public override string ToString()
+        public string ToString(bool path = false)
         {
-            return Location;
+            return path ? Location : Name;
         }
 
         #endregion

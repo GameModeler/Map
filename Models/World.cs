@@ -140,15 +140,19 @@ namespace Map.Models
 
         /// <summary>
         /// World default initialization.
+        /// <param name="defaultLayerName">Name of the default layer.</param>
         /// </summary>
-        public World()
+        public World(string defaultLayerName = "Layer 1")
         {
             Name = "My Map";
             Width = 15;
             Height = 10;
             CellWidth = 64;
             CellHeight = 64;
-            Layers = new ObservableCollection<Layer>();
+            Layers = new ObservableCollection<Layer>
+            {
+                new Layer(defaultLayerName)
+            };
             IsSaved = false;
             IsModified = true;
         }
@@ -162,7 +166,9 @@ namespace Map.Models
         /// <param name="cellWidth">Width of a cell.</param>
         /// <param name="cellHeight">Height of a cell.</param>
         /// <param name="background">The map's background.</param>
-        public World(string name, int width, int height, int cellWidth, int cellHeight, Asset background) : this()
+        /// <param name="defaultLayerName">Name of the default layer.</param>
+        public World(string name, int width, int height, int cellWidth, int cellHeight, Asset background, string defaultLayerName = "Layer 1") 
+            : this(defaultLayerName)
         {
             Name = name;
             Width = width;
@@ -182,7 +188,9 @@ namespace Map.Models
         /// <param name="cellHeight">Height of a cell.</param>
         /// <param name="background">The map's background.</param>
         /// <param name="isSaved">The map's starting saved state.</param>
-        public World(string name, int width, int height, int cellWidth, int cellHeight, Asset background, bool isSaved) : this(name, width, height, cellWidth, cellHeight, background)
+        /// <param name="defaultLayerName">Name of the default layer.</param>
+        public World(string name, int width, int height, int cellWidth, int cellHeight, Asset background, bool isSaved, string defaultLayerName = "Layer 1") 
+            : this(name, width, height, cellWidth, cellHeight, background, defaultLayerName)
         {
             IsSaved = isSaved;
         }
