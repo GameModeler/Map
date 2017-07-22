@@ -1,18 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{0557BD8E-4AC8-4658-80F7-6470E13BEF6E}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Map</RootNamespace>
     <AssemblyName>Map</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -24,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -38,51 +36,93 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Net.Http" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\Asset.cs" />
-    <Compile Include="Models\Cell.cs" />
-    <Compile Include="Models\Layer.cs" />
-    <Compile Include="Models\World.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <AppDesigner Include="Properties\" />
+    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <Compile Include="Core\Clock.cs" />
+    <Compile Include="Core\ObjectBase.cs" />
+    <Compile Include="Core\Structs\Time.cs" />
+    <Compile Include="Core\Structs\Vector2D.cs" />
+    <Compile Include="Core\Structs\Vector3D.cs" />
+    <Compile Include="Graphics\CircleShape.cs" />
+    <Compile Include="Graphics\Context.cs" />
+    <Compile Include="Graphics\ConvexShape.cs" />
+    <Compile Include="Graphics\Enums\BlendEquation.cs" />
+    <Compile Include="Graphics\Enums\BlendFactor.cs" />
+    <Compile Include="Graphics\Enums\PrimitiveType.cs" />
+    <Compile Include="Graphics\Enums\TextStyle.cs" />
+    <Compile Include="Graphics\Font.cs" />
+    <Compile Include="Graphics\Image.cs" />
+    <Compile Include="Graphics\Interfaces\IDrawable.cs" />
+    <Compile Include="Graphics\Interfaces\IRenderTarget.cs" />
+    <Compile Include="Graphics\RectangleShape.cs" />
+    <Compile Include="Graphics\RenderTexture.cs" />
+    <Compile Include="Graphics\RenderWindow.cs" />
+    <Compile Include="Graphics\Shader.cs" />
+    <Compile Include="Graphics\Shape.cs" />
+    <Compile Include="Graphics\Sprite.cs" />
+    <Compile Include="Graphics\Structs\BlendMode.cs" />
+    <Compile Include="Graphics\Structs\Color.cs" />
+    <Compile Include="Graphics\Structs\Glyph.cs" />
+    <Compile Include="Graphics\Structs\Rect.cs" />
+    <Compile Include="Graphics\Structs\RenderStates.cs" />
+    <Compile Include="Graphics\Structs\Transform.cs" />
+    <Compile Include="Graphics\Structs\Vertex.cs" />
+    <Compile Include="Graphics\Text.cs" />
+    <Compile Include="Graphics\Texture.cs" />
+    <Compile Include="Graphics\Transformable.cs" />
+    <Compile Include="Graphics\VertexArray.cs" />
+    <Compile Include="Graphics\View.cs" />
+    <Compile Include="Window\Enums\EventType.cs" />
+    <Compile Include="Window\Enums\ControllerAxis.cs" />
+    <Compile Include="Window\Enums\KeyboardKey.cs" />
+    <Compile Include="Window\Enums\MouseButton.cs" />
+    <Compile Include="Window\Enums\SensorType.cs" />
+    <Compile Include="Window\Enums\WindowStyle.cs" />
+    <Compile Include="Window\Controller.cs" />
+    <Compile Include="Window\Events\ControllerEvent.cs" />
+    <Compile Include="Window\Events\ControllerEventArgs.cs" />
+    <Compile Include="Window\Events\Event.cs" />
+    <Compile Include="Window\Events\KeyEvent.cs" />
+    <Compile Include="Window\Events\KeyEventArgs.cs" />
+    <Compile Include="Window\Events\MouseEvent.cs" />
+    <Compile Include="Window\Events\MouseEventArgs.cs" />
+    <Compile Include="Window\Events\SensorEvent.cs" />
+    <Compile Include="Window\Events\SensorEventArgs.cs" />
+    <Compile Include="Window\Events\SizeEvent.cs" />
+    <Compile Include="Window\Events\SizeEventArgs.cs" />
+    <Compile Include="Window\Events\TextEvent.cs" />
+    <Compile Include="Window\Events\TextEventArgs.cs" />
+    <Compile Include="Window\Events\TouchEvent.cs" />
+    <Compile Include="Window\Events\TouchEventArgs.cs" />
+    <Compile Include="Window\Exceptions\LoadingFailedException.cs" />
+    <Compile Include="Window\Keyboard.cs" />
+    <Compile Include="Window\Mouse.cs" />
+    <Compile Include="Window\Sensor.cs" />
+    <Compile Include="Window\StreamAdaptor.cs" />
+    <Compile Include="Window\Structs\ContextSettings.cs" />
+    <Compile Include="Window\Structs\InputStream.cs" />
+    <Compile Include="Window\Structs\VideoMode.cs" />
+    <Compile Include="Window\Touch.cs" />
+    <Compile Include="Window\Window.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="csfml-audio-2.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="csfml-graphics-2.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="csfml-network-2.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="csfml-system-2.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="csfml-window-2.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>
