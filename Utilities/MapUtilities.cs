@@ -1,12 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using Map.Properties;
 
 namespace Map.Utilities
 {
-    public class MapUtilities
+    /// <summary>
+    /// Cross platform utility class
+    /// </summary>
+    public static class MapUtilities
     {
         /// <summary>
         /// Clones a serializable object to create a copy.
@@ -34,6 +39,19 @@ namespace Map.Utilities
                 stream.Seek(0, SeekOrigin.Begin);
                 return (T) formatter.Deserialize(stream);
             }
+        }
+
+        /// <summary>
+        /// Concatenate strings in a list with a separator and a transformation applied to each item.
+        /// </summary>
+        /// <param name="stringArray">The string array to concatenate.</param>
+        /// <param name="separator">The separator.</param>
+        /// <param name="prefix">The prefix string to add to each item.</param>
+        /// <param name="suffix">The suffix string to add to each item.</param>
+        /// <returns></returns>
+        public static string ConcatenateArrayWithTransformation(IEnumerable<string> stringArray, string separator, string prefix, string suffix)
+        {
+            return string.Format($"{string.Join(separator, stringArray.Select(s => string.Format($"{prefix}{s.ToString()}{suffix}")).ToArray())}");
         }
     }
 }

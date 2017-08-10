@@ -1,12 +1,19 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
+using System.Windows.Controls;
 using Map.Annotations;
+using Map.WPF.Graphics;
+using Point = System.Drawing.Point;
 
-namespace Map.Models.Base
+namespace Map.WPF
 {
+    /// <summary>
+    /// Define the base components of a game object using WPF
+    /// </summary>
     [Serializable]
-    public abstract class BaseModel : INotifyPropertyChanged
+    public abstract class WatchedObject : DependencyObject, INotifyPropertyChanged
     {
         #region Attributes
         #endregion
@@ -24,7 +31,7 @@ namespace Map.Models.Base
         #region Methods
 
         [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected virtual void NotifyChange([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
