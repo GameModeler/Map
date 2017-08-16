@@ -1,54 +1,54 @@
-﻿// Does a math equation on the bound value.
-// Use @VALUE in your mathEquation as a substitute for bound value
-// Operator order is parenthesis first, then Left-To-Right (no operator precedence)
-
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Windows.Data;
 
-namespace Map.WPF.Converters
+namespace Map.Converters
 {
     /// <summary>
-    /// Perform a math equation on the bound value.
-    /// Use @VALUE in the mathEquation as a substitute for bound value
-    /// Operator order is parenthesis first, then Left-To-Right (no operator precedence)
+    /// Perform a math equation on a bound value
     /// </summary>
     public class MathConverter : IValueConverter
     {
         #region Attributes
 
-        private static readonly char[] _allOperators = new[] { '+', '-', '*', '/', '%', '(', ')' };
-        private static readonly List<string> _grouping = new List<string> { "(", ")" };
-        private static readonly List<string> _operators = new List<string> { "+", "-", "*", "/", "%" };
+        private static readonly char[] AllOperators = new[] {'+', '-', '*', '/', '%', '(', ')'};
+
+        private static readonly List<string> Operators = new List<string> {"+", "-", "*", "/", "%"};
+
+        private static readonly List<string> Grouping = new List<string> { "(", ")" };
 
         #endregion
 
         #region Methods
 
         /// <summary>
-        /// 
+        /// Convert the value
         /// </summary>
-        /// <param name="value"></param>
-        /// <param name="targetType"></param>
-        /// <param name="parameter"></param>
-        /// <param name="culture"></param>
-        /// <returns></returns>
+        /// <param name="value">Value produced by the binding source</param>
+        /// <param name="targetType">Type of the binding target property</param>
+        /// <param name="parameter">Converter parameter to use</param>
+        /// <param name="culture">Cuture to use in the converter</param>
+        /// <returns>Converted value</returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            // Parse value into equation and remove spaces
-            var mathEquation = parameter as string;
-            mathEquation = mathEquation.Replace(" ", "");
-            mathEquation = mathEquation.Replace("@VALUE", value.ToString());
-
-            // Validate values and get list of numbers in equation
             var numbers = new List<double>();
+            var mathEquation = parameter as string;
+            mathEquation = mathEquation?.Replace(" ", "");
+            mathEquation = mathEquation?.Replace("@VALUE", value?.ToString());
 
-            foreach (var s in mathEquation.Split(_allOperators))
+            if (mathEquation == null || value == null)
+            {
+                return null;
+            }
+
+            foreach (var s in mathEquation.Split(AllOperators))
             {
                 if (s == string.Empty)
+                {
                     continue;
+                }
 
                 if (double.TryParse(s, out double tmp))
                 {
@@ -56,76 +56,71 @@ namespace Map.WPF.Converters
                 }
                 else
                 {
-                    // Handle Error - Some non-numeric, operator, or grouping character found in string
-                    throw new InvalidCastException();
+                    throw new InvalidCastException("Some non-numeric, operator or grouping character found");
                 }
             }
 
-            // Begin parsing method
             EvaluateMathString(ref mathEquation, ref numbers, 0);
 
-            // After parsing the numbers list should only have one value - the total
             return numbers[0];
         }
 
         /// <summary>
-        /// 
+        /// Convert back the value
         /// </summary>
-        /// <param name="value"></param>
-        /// <param name="targetType"></param>
-        /// <param name="parameter"></param>
-        /// <param name="culture"></param>
-        /// <returns></returns>
+        /// <param name="value">Value produced by the binding source</param>
+        /// <param name="targetType">Type of the binding target property</param>
+        /// <param name="parameter">Converter parameter to use</param>
+        /// <param name="culture">Cuture to use in the converter</param>
+        /// <returns>Converted value</returns>
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }
 
         /// <summary>
-        /// Evaluates a mathematical string and keeps track of the results in a List&lt;double&gt; of numbers
+        /// Evaluate a mathematical string and keep track of the results in a list of numbers
         /// </summary>
-        /// <param name="mathEquation"></param>
-        /// <param name="numbers"></param>
-        /// <param name="index"></param>
+        /// <param name="mathEquation">The math equation</param>
+        /// <param name="numbers">List of numbers</param>
+        /// <param name="index">Current numbers index</param>
         private void EvaluateMathString(ref string mathEquation, ref List<double> numbers, int index)
         {
-            // Loop through each mathemtaical token in the equation
             var token = GetNextToken(mathEquation);
 
+            // Loop through each mathematical token
             while (token != string.Empty)
             {
-                // Remove token from mathEquation
+                // Remove the token from the equation
                 mathEquation = mathEquation.Remove(0, token.Length);
 
-                // If token is a grouping character, it affects program flow
-                if (_grouping.Contains(token))
+                // If the token is a grouping character
+                if (Grouping.Contains(token))
                 {
                     switch (token)
                     {
                         case "(":
                             EvaluateMathString(ref mathEquation, ref numbers, index);
                             break;
-
                         case ")":
                             return;
                     }
                 }
 
-                // If token is an operator, do requested operation
-                if (_operators.Contains(token))
+                // If the token is an operator
+                if (Operators.Contains(token))
                 {
-                    // If next token after operator is a parenthesis, call method recursively
                     var nextToken = GetNextToken(mathEquation);
+
                     if (nextToken == "(")
                     {
                         EvaluateMathString(ref mathEquation, ref numbers, index + 1);
                     }
 
-                    // Verify that enough numbers exist in the List<double> to complete the operation
-                    // and that the next token is either the number expected, or it was a ( meaning
-                    // that this was called recursively and that the number changed
-                    if (numbers.Count > (index + 1) &&
-                        (double.Parse(nextToken) == numbers[index + 1] || nextToken == "("))
+                    // Verify that enough numbers exist in the list to complete the operation
+                    // and that the next token is the number expected or a grouping character
+                    if (numbers.Count > index + 1 &&
+                        (double.Parse(nextToken).Equals(numbers[index + 1]) || nextToken == "("))
                     {
                         switch (token)
                         {
@@ -145,11 +140,11 @@ namespace Map.WPF.Converters
                                 numbers[index] = numbers[index] % numbers[index + 1];
                                 break;
                         }
+
                         numbers.RemoveAt(index + 1);
                     }
                     else
                     {
-                        // Handle Error - Next token is not the expected number
                         throw new FormatException("Next token is not the expected number");
                     }
                 }
@@ -158,25 +153,30 @@ namespace Map.WPF.Converters
             }
         }
 
-        // Gets the next mathematical token in the equation
-        private string GetNextToken(string mathEquation)
+        /// <summary>
+        /// Get the next mathematical token in the equation
+        /// </summary>
+        /// <param name="mathEquation">The math equation</param>
+        /// <returns>The next mathematical token</returns>
+        private static string GetNextToken(string mathEquation)
         {
-            // If we're at the end of the equation, return string.empty
+            // If we're at the end of the equation
             if (mathEquation == string.Empty)
             {
                 return string.Empty;
             }
 
-            // Get next operator or numeric value in equation and return it
-            var tmp = "";
-            foreach (var c in mathEquation)
+            var tmp = string.Empty;
+
+            // Get the next operator or numeric value in the equation
+            foreach (var item in mathEquation)
             {
-                if (((IList) _allOperators).Contains(c))
+                if (((IList) AllOperators).Contains(item))
                 {
-                    return (tmp == "" ? c.ToString() : tmp);
+                    return tmp == string.Empty ? item.ToString() : tmp;
                 }
 
-                tmp += c;
+                tmp += item;
             }
 
             return tmp;
