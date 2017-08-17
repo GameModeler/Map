@@ -8,6 +8,7 @@ using System.Windows.Input;
 using Map.Annotations;
 using Map.Commands;
 using Map.Graphics;
+using Map.Interfaces;
 using Map.Models;
 using Map.UserControls;
 
@@ -247,6 +248,16 @@ namespace Map.ViewModels
                 .Where(p => ValidPositions.Contains(p.Position))
                 .ToList()
                 .ForEach(p => p.IsActive = true);
+        }
+
+        public BaseModel GetItemAt(Point position)
+        {
+            var userControl = GridLayer.Children
+                .OfType<BaseUserControl>()
+                .ToList()
+                .First(uc => uc.Position == position);
+
+            return userControl.DataContext as BaseModel;
         }
 
         /// <summary>
