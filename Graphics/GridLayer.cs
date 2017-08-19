@@ -256,10 +256,10 @@ namespace Map.Graphics
         }
 
         /// <summary>
-        /// 
+        /// Parse a value
         /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
+        /// <param name="value">Value to be parsed</param>
+        /// <returns>The parsed value</returns>
         private static IEnumerable<GridLength> Parse(string value)
         {
             if (!value.Contains("#"))
@@ -277,10 +277,10 @@ namespace Map.Graphics
         }
 
         /// <summary>
-        /// 
+        /// Parse a grid length value
         /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
+        /// <param name="value">Grid length value to be parsed</param>
+        /// <returns>The parsed value</returns>
         private static GridLength ParseGridLength(string value)
         {
             value = value.Trim();

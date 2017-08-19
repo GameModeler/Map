@@ -28,7 +28,11 @@ namespace Map.Graphics
 
         #endregion
 
+        #region Attributes
+
         private bool _isActive;
+
+        #endregion
 
         #region Properties
 

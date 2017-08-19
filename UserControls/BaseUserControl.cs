@@ -39,8 +39,18 @@ namespace Map.UserControls
                 return;
             }
 
-            Grid.SetRow(userControl, (int) ((Point) newValue).Y - 1);
-            Grid.SetColumn(userControl, (int) ((Point) newValue).X - 1);
+            var x = (int) ((Point) newValue).X;
+            var y = (int) ((Point) newValue).Y;
+
+            if (y != 0)
+            {
+                Grid.SetRow(userControl, y - 1);
+            }
+
+            if (x != 0)
+            {
+                Grid.SetColumn(userControl, x - 1);
+            }
         }
 
         #endregion

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.CompilerServices;
+using System.Windows.Media;
 using Map.Annotations;
 
 namespace Map.Models
@@ -11,26 +13,13 @@ namespace Map.Models
     [Serializable]
     public abstract class BaseModel : INotifyPropertyChanged
     {
-        #region Attributes
-
-        private int _id;
-
-        #endregion
-
         #region Properties
 
         /// <summary>
-        /// Model's id
+        /// Converter to convert a brush to a string representation
         /// </summary>
-        public int Id
-        {
-            get => _id;
-            set
-            {
-                _id = value;
-                NotifyPropertyChanged();
-            }
-        }
+        [NotMapped]
+        public BrushConverter BrushConverter { get; set; }
 
         #endregion
 
@@ -39,6 +28,18 @@ namespace Map.Models
         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
 
+        #endregion
+
+        #region Constructors
+
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        protected BaseModel()
+        {
+            BrushConverter = new BrushConverter();
+        }
+        
         #endregion
 
         #region Methods
