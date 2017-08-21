@@ -44,27 +44,6 @@ namespace Map
         }
 
         /// <summary>
-        /// Get all children inside a dependency object
-        /// </summary>
-        /// <param name="root">The dependency object to search in</param>
-        /// <returns>The children found</returns>
-        public static IEnumerable<DependencyObject> FindChildren(this DependencyObject root)
-        {
-            var count = VisualTreeHelper.GetChildrenCount(root);
-
-            for (var i = 0; i < count; i++)
-            {
-                var child = VisualTreeHelper.GetChild(root, i);
-                yield return child;
-
-                foreach (var descendants in child.FindChildren())
-                {
-                    yield return descendants;
-                }
-            }
-        }
-
-        /// <summary>
         /// Find a child of the given object in the visual tree
         /// </summary>
         /// <typeparam name="T">Type of the child</typeparam>
@@ -72,7 +51,7 @@ namespace Map
         /// <param name="name">Name of the child</param>
         /// <returns></returns>
         [CanBeNull]
-        public static T FindChild<T>(DependencyObject d, string name) where T : DependencyObject
+        public static T FindChild<T>(DependencyObject d, string name = "") where T : DependencyObject
         {
             if (d == null)
             {
@@ -177,9 +156,11 @@ namespace Map
         /// <param name="prefix">The prefix string to add to each item</param>
         /// <param name="suffix">The suffix string to add to each item</param>
         /// <returns></returns>
-        public static string ConcatenateArrayWithTransformation(IEnumerable<string> stringArray, string separator, string prefix, string suffix)
+        public static string ConcatenateArrayWithTransformation
+            (IEnumerable<string> stringArray, string separator, string prefix, string suffix)
         {
-            return string.Format($"{string.Join(separator, stringArray.Select(s => string.Format($"{prefix}{s.ToString()}{suffix}")).ToArray())}");
+            return string
+                .Format($"{string.Join(separator, stringArray.Select(s => string.Format($"{prefix}{s.ToString()}{suffix}")).ToArray())}");
         }
     }
 }

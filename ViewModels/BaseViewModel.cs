@@ -22,6 +22,8 @@ namespace Map.ViewModels
         /// </summary>
         public GridLayer GridLayer { get; set; }
 
+        public bool AllowOccupiedPositions { get; set; }
+
         /// <summary>
         /// Item currently selected
         /// </summary>
@@ -61,6 +63,7 @@ namespace Map.ViewModels
         /// </summary>
         public BaseViewModel()
         {
+            AllowOccupiedPositions = false;
             ValidPositions = new List<Point>();
 
             FocusOnPlaceholderCommand = new RelayCommand(FocusOnPlaceholder, null);
@@ -239,6 +242,12 @@ namespace Map.ViewModels
         /// </summary>
         public void ValidatePositions()
         {
+            ValidPositions
+                .Where(vp => vp.X > GridLayer.ColumnDefinitions.Count || 
+                    vp.Y > GridLayer.RowDefinitions.Count)
+                .ToList()
+                .ForEach(vp => ValidPositions.Remove(vp));
+
             GridLayer.Placeholders
                 .ToList()
                 .ForEach(p => p.IsActive = false);
@@ -247,6 +256,36 @@ namespace Map.ViewModels
                 .Where(p => ValidPositions.Contains(p.Position))
                 .ToList()
                 .ForEach(p => p.IsActive = true);
+
+            if (!AllowOccupiedPositions)
+            {
+                GridLayer.Placeholders
+                    .Where(p => GetLayerData(p.Position) != null)
+                    .ToList()
+                    .ForEach(p => p.IsActive = false);
+            }
+        }
+
+        /// <summary>
+        /// Get the data of a user control at a specific position in the grid layer
+        /// </summary>
+        /// <param name="position">Position to search in</param>
+        /// <returns>The data of the user control or null if no user control is found</returns>
+        public BaseModel GetLayerData(Point position)
+        {
+            var userControl = GridLayer
+                .Children
+                .OfType<BaseUserControl>()
+                .FirstOrDefault(uc => uc.Position == position);
+
+            var model = userControl?.DataContext as BaseModel;
+
+            if (userControl == null || model == null)
+            {
+                return null;
+            }
+
+            return model;
         }
 
         /// <summary>
