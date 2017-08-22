@@ -46,7 +46,7 @@ namespace Map.Graphics
         /// </summary>
         public bool IsActive
         {
-            get => _isActive;
+            get { return _isActive; }
             set
             {
                 _isActive = value;
@@ -55,14 +55,12 @@ namespace Map.Graphics
                 {
                     var grid = Utilities.FindParent<GridLayer>(this);
 
-                    if (grid == null)
+                    if (grid != null)
                     {
-                        return;
+                        BorderThickness = new Thickness(grid.ValidPositionStrokeThickness);
+                        BorderBrush = grid.ValidPositionStrokeColor;
+                        Background = grid.ValidPositionBackground;
                     }
-
-                    BorderThickness = new Thickness(grid.ValidPositionStrokeThickness);
-                    BorderBrush = grid.ValidPositionStrokeColor;
-                    Background = grid.ValidPositionBackground;
                 }
                 else
                 {

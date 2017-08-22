@@ -15,8 +15,8 @@ namespace Map.UserControls
         /// </summary>
         public Point Position
         {
-            get => (Point) GetValue(PositionProperty);
-            set => SetValue(PositionProperty, value);
+            get { return (Point) GetValue(PositionProperty); }
+            set { SetValue(PositionProperty, value); }
         }
 
         #endregion
