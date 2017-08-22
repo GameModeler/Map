@@ -37,7 +37,12 @@ namespace Map.Commands
         /// <param name="canExecute">Condition method to decide if the action can be executed</param>
         public RelayCommand(Action<object> execute, Predicate<object> canExecute)
         {
-            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
+            if (execute == null)
+            {
+                throw new ArgumentNullException(nameof(execute));
+            }
+
+            _execute = execute;
             _canExecute = canExecute;
         }
 

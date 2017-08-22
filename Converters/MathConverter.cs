@@ -37,6 +37,7 @@ namespace Map.Converters
             var mathEquation = parameter as string;
             mathEquation = mathEquation?.Replace(" ", "");
             mathEquation = mathEquation?.Replace("@VALUE", value?.ToString());
+            double tmp;
 
             if (mathEquation == null || value == null)
             {
@@ -50,7 +51,7 @@ namespace Map.Converters
                     continue;
                 }
 
-                if (double.TryParse(s, out double tmp))
+                if (double.TryParse(s, out tmp))
                 {
                     numbers.Add(tmp);
                 }
