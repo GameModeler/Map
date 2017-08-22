@@ -41,8 +41,8 @@ namespace Map.Graphics
         /// </summary>
         public string Rows
         {
-            get => (string) GetValue(RowsProperty);
-            set => SetValue(RowsProperty, value);
+            get { return (string) GetValue(RowsProperty); }
+            set { SetValue(RowsProperty, value); }
         }
 
         /// <summary>
@@ -50,8 +50,8 @@ namespace Map.Graphics
         /// </summary>
         public string Columns
         {
-            get => (string) GetValue(ColumnsProperty);
-            set => SetValue(ColumnsProperty, value);
+            get { return (string)GetValue(ColumnsProperty); }
+            set { SetValue(ColumnsProperty, value); }
         }
 
         /// <summary>
@@ -59,8 +59,8 @@ namespace Map.Graphics
         /// </summary>
         public int ValidPositionStrokeThickness
         {
-            get => (int) GetValue(ValidPositionStrokeThicknessProperty);
-            set => SetValue(ValidPositionStrokeThicknessProperty, value);
+            get { return (int) GetValue(ValidPositionStrokeThicknessProperty); }
+            set { SetValue(ValidPositionStrokeThicknessProperty, value); }
         }
 
         /// <summary>
@@ -68,8 +68,8 @@ namespace Map.Graphics
         /// </summary>
         public Brush ValidPositionStrokeColor
         {
-            get => (Brush) GetValue(ValidPositionStrokeColorProperty);
-            set => SetValue(ValidPositionStrokeColorProperty, value);
+            get { return (Brush) GetValue(ValidPositionStrokeColorProperty); }
+            set { SetValue(ValidPositionStrokeColorProperty, value); }
         }
 
         /// <summary>
@@ -77,8 +77,8 @@ namespace Map.Graphics
         /// </summary>
         public Brush ValidPositionBackground
         {
-            get => (Brush) GetValue(ValidPositionBackgroundProperty);
-            set => SetValue(ValidPositionBackgroundProperty, value);
+            get { return (Brush) GetValue(ValidPositionBackgroundProperty); }
+            set { SetValue(ValidPositionBackgroundProperty, value); }
         }
 
         #endregion
